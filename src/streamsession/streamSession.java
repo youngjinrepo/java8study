@@ -2,16 +2,12 @@ package streamsession;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class streamSession {
 
-    public static void main(String[] args) {
-        session1();
-    }
 
-    //flatMap
-    public static void session1() {
+    public static void main(String[] args) {
         List<Starbucks> winterSeason = new ArrayList<>();
         winterSeason.add(new Starbucks(1, "coffee", "americano", false));
         winterSeason.add(new Starbucks(2, "coffee", "coldBrewed", true));
@@ -25,13 +21,34 @@ public class streamSession {
         allSeason.add(winterSeason);
         allSeason.add(springSeason);
 
+        System.out.println("session1 /////////////////////////////////////////");
+        session1(allSeason);
+
+        System.out.println("session2 /////////////////////////////////////////");
+        session2();
+    }
+
+    //flatMap
+    public static void session1( List<List<Starbucks>> allSeason ) {
         allSeason.stream() // stream { winterSeason, springSeason }
                 .flatMap(eachList -> eachList.stream()) // stream { americano, coldBrewed, greentea, Strawberry, Strawberry }
                 .forEach(menu-> System.out.println(menu.getName()));
-
     }
 
+    //Stream 기능 활용
+    public static void session2() {
+        Stream.iterate(1, i -> i + 1) // seed 와 UnaryOperator 를 인자로 줌
+                .skip(10)
+                .limit(10)
+                .forEach(System.out::println);
+        ;
+    }
 
+    //anyMatch
+    public static void sessionAnyMatch(List<Starbucks> menu) {
+        boolean match = menu.stream()
+                .anyMatch(m -> m.getName().contains("o"));
+    }
 
     //////////////////////////////////////////////////////////////
     public static class Starbucks {
